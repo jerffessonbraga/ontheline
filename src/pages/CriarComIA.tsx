@@ -37,7 +37,7 @@ const CriarComIA = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  const handleSave = async () => {
+  const handleSave = async (schedule = false) => {
     if (!generatedContent || !user) return;
     try {
       const { error } = await supabase.from("posts").insert({
@@ -49,12 +49,12 @@ const CriarComIA = () => {
         detalhes: detalhes || null,
         generated_content: generatedContent,
         scheduled_at: dataHora ? new Date(dataHora).toISOString() : null,
-        status: "rascunho",
+        status: schedule ? "agendado" : "rascunho",
       });
       if (error) throw error;
       setIsSaved(true);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
-      toast.success("Post salvo no histórico! 📋");
+      toast.success(schedule ? "Post agendado! 📅" : "Post salvo no histórico! 📋");
     } catch (e: any) {
       toast.error(e.message || "Erro ao salvar post");
     }
