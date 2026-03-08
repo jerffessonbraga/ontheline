@@ -286,7 +286,7 @@ const Configuracao = () => {
             <div>
               <h3 className="text-base font-semibold">Publicação 100% automática</h3>
               <p className="text-sm text-muted-foreground mt-1.5">
-                O InstaFlow agenda e publica automaticamente via backend — sem precisar abrir o app na hora marcada.
+                O Postei agenda e publica automaticamente via backend — sem precisar abrir o app na hora marcada.
               </p>
             </div>
           </div>
