@@ -263,6 +263,15 @@ const CriarComIA = () => {
         </div>
 
         <div className="space-y-2">
+          <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Mídia (Imagem/Vídeo)</label>
+          <MediaUpload
+            mediaUrl={mediaUrl}
+            onUpload={(url) => setMediaUrl(url)}
+            onRemove={() => setMediaUrl(null)}
+          />
+        </div>
+
+        <div className="space-y-2">
           <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Agendar Para</label>
           <Input
             type="datetime-local"
