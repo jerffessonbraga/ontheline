@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 interface MediaUploadProps {
   onUpload: (url: string) => void;
   onRemove: () => void;
+  onPreviewChange?: (url: string | null) => void;
   mediaUrl: string | null;
   accept?: string;
 }
