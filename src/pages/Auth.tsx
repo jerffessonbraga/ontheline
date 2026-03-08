@@ -50,7 +50,7 @@ const Auth = () => {
       >
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl gradient-button flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">📷</span>
+            <Instagram size={32} className="text-white" />
           </div>
           <h1 className="font-display text-3xl font-bold">Postei</h1>
           <p className="text-muted-foreground mt-2">
