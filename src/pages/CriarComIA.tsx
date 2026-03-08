@@ -345,8 +345,14 @@ const CriarComIA = () => {
               </div>
               <span className="ml-auto text-muted-foreground">•••</span>
             </div>
-            <div className="aspect-square bg-muted flex flex-col items-center justify-center gap-3 text-muted-foreground">
-              {isGenerating ? (
+            <div className="aspect-square bg-muted flex flex-col items-center justify-center gap-3 text-muted-foreground overflow-hidden">
+              {mediaUrl ? (
+                mediaUrl.match(/\.(mp4|mov|webm|avi)$/i) ? (
+                  <video src={mediaUrl} className="w-full h-full object-cover" muted autoPlay loop />
+                ) : (
+                  <img src={mediaUrl} alt="Preview" className="w-full h-full object-cover" />
+                )
+              ) : isGenerating ? (
                 <Loader2 size={32} className="animate-spin text-primary" />
               ) : (
                 <>
