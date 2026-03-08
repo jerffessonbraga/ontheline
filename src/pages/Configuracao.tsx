@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { AlertTriangle, X, Rocket, Key, ExternalLink, Instagram, CheckCircle2, Link2, Shield } from "lucide-react";
+import { Rocket, CheckCircle2, Instagram, Link2, Shield, Loader2, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const Configuracao = () => {
   const { user } = useAuth();
-  const [showWarning, setShowWarning] = useState(false);
+  const queryClient = useQueryClient();
+  const [connecting, setConnecting] = useState(false);
+  const [disconnecting, setDisconnecting] = useState(false);
 
   const { data: igConnection } = useQuery({
     queryKey: ["instagram_connection", user?.id],
@@ -23,6 +25,45 @@ const Configuracao = () => {
     },
     enabled: !!user,
   });
+
+  const handleConnectInstagram = async () => {
+    setConnecting(true);
+    try {
+      const redirectUri = `${window.location.origin}/instagram/callback`;
+      const { data, error } = await supabase.functions.invoke("instagram-auth", {
+        body: { action: "get_auth_url", redirect_uri: redirectUri },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      // Redirect to Facebook OAuth
+      window.location.href = data.authUrl;
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || "Erro ao iniciar conexão com Instagram");
+      setConnecting(false);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    setDisconnecting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("instagram-auth", {
+        body: { action: "disconnect" },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast.success("Instagram desconectado");
+      queryClient.invalidateQueries({ queryKey: ["instagram_connection"] });
+    } catch (err: any) {
+      toast.error(err.message || "Erro ao desconectar");
+    } finally {
+      setDisconnecting(false);
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8 pb-20 space-y-8">
@@ -83,63 +124,85 @@ const Configuracao = () => {
           </div>
           <div className="flex-1 space-y-4">
             <div className="flex items-center gap-3">
-              <h2 className="font-display text-lg font-semibold">Instagram</h2>
+              <h2 className="font-display text-lg font-semibold">Instagram Business</h2>
               {igConnection ? (
                 <span className="text-[10px] font-bold bg-success/20 text-success px-2 py-0.5 rounded-full uppercase">
                   Conectado
                 </span>
               ) : (
-                <span className="text-[10px] font-bold bg-warning/20 text-warning px-2 py-0.5 rounded-full uppercase">
-                  Em breve
+                <span className="text-[10px] font-bold bg-muted text-muted-foreground px-2 py-0.5 rounded-full uppercase">
+                  Não conectado
                 </span>
               )}
             </div>
 
             {igConnection ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
                   Conectado como <strong className="text-foreground">@{igConnection.instagram_username}</strong>
                 </p>
+                {igConnection.token_expires_at && (
+                  <p className="text-xs text-muted-foreground">
+                    Token expira em {new Date(igConnection.token_expires_at).toLocaleDateString("pt-BR")}
+                  </p>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDisconnect}
+                  disabled={disconnecting}
+                  className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                >
+                  {disconnecting ? <Loader2 size={14} className="mr-2 animate-spin" /> : <LogOut size={14} className="mr-2" />}
+                  Desconectar
+                </Button>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  A publicação automática via Meta Graph API está sendo preparada. Por enquanto, o InstaFlow funciona como copiloto:
+                  Conecte sua conta Business ou Creator para publicar automaticamente posts do tipo Feed e Carrossel.
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">
-                    <span className="text-primary mt-0.5">✦</span>
-                    <div>
-                      <p className="text-xs font-semibold">Gerar</p>
-                      <p className="text-[10px] text-muted-foreground">IA cria o conteúdo</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">
-                    <span className="text-primary mt-0.5">✦</span>
-                    <div>
-                      <p className="text-xs font-semibold">Agendar</p>
-                      <p className="text-[10px] text-muted-foreground">Calendário visual</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">
-                    <span className="text-primary mt-0.5">✦</span>
-                    <div>
-                      <p className="text-xs font-semibold">Lembrete</p>
-                      <p className="text-[10px] text-muted-foreground">Notifica na hora</p>
-                    </div>
-                  </div>
-                </div>
+
+                <Button
+                  onClick={handleConnectInstagram}
+                  disabled={connecting}
+                  className="gradient-button border-0"
+                >
+                  {connecting ? (
+                    <Loader2 size={14} className="mr-2 animate-spin" />
+                  ) : (
+                    <Instagram size={14} className="mr-2" />
+                  )}
+                  Conectar Instagram Business
+                </Button>
 
                 <div className="p-3 rounded-lg bg-muted/50 border border-border">
                   <h4 className="text-xs font-semibold flex items-center gap-1.5 mb-2">
                     <Shield size={12} className="text-muted-foreground" />
-                    Requisitos para publicação automática
+                    Requisitos
                   </h4>
                   <ul className="text-[11px] text-muted-foreground space-y-1">
                     <li>▸ Conta Business ou Creator no Instagram</li>
-                    <li>▸ Página do Facebook vinculada</li>
-                    <li>▸ App aprovado pela Meta (em processo)</li>
+                    <li>▸ Página do Facebook vinculada ao Instagram</li>
+                    <li>▸ Facebook App configurado (App ID + App Secret)</li>
                   </ul>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="flex items-start gap-2 p-3 rounded-lg bg-success/5 border border-success/20">
+                    <span className="text-success mt-0.5">✓</span>
+                    <div>
+                      <p className="text-xs font-semibold">Feed & Carrossel</p>
+                      <p className="text-[10px] text-muted-foreground">Publicação automática</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 p-3 rounded-lg bg-warning/5 border border-warning/20">
+                    <span className="text-warning mt-0.5">⚠</span>
+                    <div>
+                      <p className="text-xs font-semibold">Reels & Stories</p>
+                      <p className="text-[10px] text-muted-foreground">Não suportado pela Meta API</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -158,7 +221,7 @@ const Configuracao = () => {
           <Link2 size={18} className="text-primary" />
           Fluxo de Publicação
         </h2>
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 text-sm flex-wrap">
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium">
             <span>1. Criar com IA</span>
           </div>
@@ -171,12 +234,14 @@ const Configuracao = () => {
             <span>3. Agendar</span>
           </div>
           <span className="text-muted-foreground">→</span>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-warning/10 text-warning font-medium">
-            <span>4. Publicar</span>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-success/10 text-success font-medium">
+            <span>4. Publicar ✓</span>
           </div>
         </div>
         <p className="text-xs text-muted-foreground mt-3">
-          Quando a integração com a Meta API estiver ativa, o passo 4 será automático.
+          {igConnection
+            ? "Instagram conectado — posts do tipo Feed e Carrossel serão publicados automaticamente."
+            : "Conecte o Instagram acima para habilitar a publicação automática."}
         </p>
       </motion.div>
     </div>

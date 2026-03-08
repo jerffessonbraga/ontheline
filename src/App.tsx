@@ -14,6 +14,7 @@ import Agendar from "@/pages/Agendar";
 import Automacoes from "@/pages/Automacoes";
 import Historico from "@/pages/Historico";
 import Auth from "@/pages/Auth";
+import InstagramCallback from "@/pages/InstagramCallback";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
 
