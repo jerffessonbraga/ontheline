@@ -283,6 +283,18 @@ const CriarComIA = () => {
             "✦ Gerar com Gemini"
           )}
         </Button>
+
+        {generatedContent && !isGenerating && (
+          <Button
+            onClick={handleSave}
+            disabled={isSaved}
+            variant="outline"
+            className="w-full py-5 text-sm font-bold rounded-xl mt-3"
+          >
+            <Save size={16} className="mr-2" />
+            {isSaved ? "✓ Salvo no Histórico" : "Salvar no Histórico"}
+          </Button>
+        )}
       </div>
 
       {/* Right panel - Preview */}
