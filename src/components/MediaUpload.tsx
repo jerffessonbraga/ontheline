@@ -58,7 +58,9 @@ const MediaUpload = ({ onUpload, onRemove, onPreviewChange, mediaUrl, accept = "
 
       const publicUrl = urlData.publicUrl;
 
-      setPreview({ url: URL.createObjectURL(file), type: isVideo ? "video" : "image" });
+      const localUrl = URL.createObjectURL(file);
+      setPreview({ url: localUrl, type: isVideo ? "video" : "image" });
+      onPreviewChange?.(localUrl);
       onUpload(publicUrl);
       toast.success("Mídia enviada! 📸");
     } catch (e: any) {
