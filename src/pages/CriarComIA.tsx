@@ -68,6 +68,7 @@ const CriarComIA = () => {
 
     setIsGenerating(true);
     setGeneratedContent("");
+    setIsSaved(false);
 
     const toneName = tones.find((t) => t.id === selectedTone)?.label || selectedTone;
     const typeName = postTypes.find((t) => t.id === selectedType)?.label || selectedType;
