@@ -14,6 +14,7 @@ import Agendar from "@/pages/Agendar";
 import Automacoes from "@/pages/Automacoes";
 import Historico from "@/pages/Historico";
 import Auth from "@/pages/Auth";
+import InstagramCallback from "@/pages/InstagramCallback";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
 
@@ -58,6 +59,7 @@ const AppContent = () => {
         <Route path="/agendar" element={<Agendar />} />
         <Route path="/automacoes" element={<Automacoes />} />
         <Route path="/historico" element={<Historico />} />
+        <Route path="/instagram/callback" element={<InstagramCallback />} />
         <Route path="/auth" element={<Navigate to="/criar" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
