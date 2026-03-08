@@ -421,6 +421,12 @@ serve(async (req) => {
             post.generated_content,
             videoUrl
           );
+        } else if (post.post_type === "story" && (imageUrl || videoUrl)) {
+          result = await publishStoryToInstagram(
+            connection as { access_token: string; instagram_user_id: string },
+            videoUrl || imageUrl,
+            !!videoUrl
+          );
         } else if (imageUrl) {
           result = await publishToInstagram(
             connection as { access_token: string; instagram_user_id: string },
