@@ -1,11 +1,13 @@
-import { Settings, Sparkles, Calendar, Zap, Plus } from "lucide-react";
+import { Settings, Sparkles, Calendar, Zap, Plus, History, LogOut } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "Configuração", icon: Settings, path: "/" },
   { label: "Criar com IA", icon: Sparkles, path: "/criar" },
   { label: "Agendar", icon: Calendar, path: "/agendar", badge: 0 },
+  { label: "Histórico", icon: History, path: "/historico" },
   { label: "Automações", icon: Zap, path: "/automacoes" },
 ];
 
