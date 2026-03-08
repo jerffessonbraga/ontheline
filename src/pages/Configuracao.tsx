@@ -79,7 +79,7 @@ const Configuracao = () => {
           Versão Gratuita
         </span>
         <h1 className="font-display text-3xl font-bold gradient-text mb-3">
-          Bem-vindo ao InstaFlow
+          Bem-vindo ao Postei
         </h1>
         <p className="text-muted-foreground max-w-lg">
           Copiloto de conteúdo para Instagram com IA. Gere, agende e publique — tudo em um só lugar.
@@ -286,7 +286,7 @@ const Configuracao = () => {
             <div>
               <h3 className="text-base font-semibold">Publicação 100% automática</h3>
               <p className="text-sm text-muted-foreground mt-1.5">
-                O InstaFlow agenda e publica automaticamente via backend — sem precisar abrir o app na hora marcada.
+                O Postei agenda e publica automaticamente via backend — sem precisar abrir o app na hora marcada.
               </p>
             </div>
           </div>
@@ -294,9 +294,9 @@ const Configuracao = () => {
           <div className="flex items-start gap-4">
             <div className="w-9 h-9 rounded-full bg-accent/15 flex items-center justify-center shrink-0 text-sm font-bold text-accent">D</div>
             <div>
-              <h3 className="text-base font-semibold">Fluxo atual do InstaFlow</h3>
+              <h3 className="text-base font-semibold">Fluxo atual do Postei</h3>
               <p className="text-sm text-muted-foreground mt-1.5">
-                IA gera conteúdo → você aprova → InstaFlow agenda → na hora certa chama a API do Instagram e publica. Simples assim.
+                IA gera conteúdo → você aprova → Postei agenda → na hora certa chama a API do Instagram e publica. Simples assim.
               </p>
             </div>
           </div>
