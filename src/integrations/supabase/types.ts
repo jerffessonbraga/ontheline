@@ -14,6 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
+      instagram_connections: {
+        Row: {
+          access_token: string | null
+          connected_at: string | null
+          created_at: string
+          id: string
+          instagram_user_id: string | null
+          instagram_username: string | null
+          is_active: boolean | null
+          page_id: string | null
+          token_expires_at: string | null
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          connected_at?: string | null
+          created_at?: string
+          id?: string
+          instagram_user_id?: string | null
+          instagram_username?: string | null
+          is_active?: boolean | null
+          page_id?: string | null
+          token_expires_at?: string | null
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          connected_at?: string | null
+          created_at?: string
+          id?: string
+          instagram_user_id?: string | null
+          instagram_username?: string | null
+          is_active?: boolean | null
+          page_id?: string | null
+          token_expires_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          post_id: string | null
+          read: boolean | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          post_id?: string | null
+          read?: boolean | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          post_id?: string | null
+          read?: boolean | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           created_at: string
@@ -22,6 +102,7 @@ export type Database = {
           id: string
           nicho: string
           post_type: string
+          published_at: string | null
           scheduled_at: string | null
           status: string
           tema: string | null
@@ -35,6 +116,7 @@ export type Database = {
           id?: string
           nicho?: string
           post_type?: string
+          published_at?: string | null
           scheduled_at?: string | null
           status?: string
           tema?: string | null
@@ -48,6 +130,7 @@ export type Database = {
           id?: string
           nicho?: string
           post_type?: string
+          published_at?: string | null
           scheduled_at?: string | null
           status?: string
           tema?: string | null
