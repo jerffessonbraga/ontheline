@@ -31,7 +31,7 @@ const Header = ({ onNewPost }: HeaderProps) => {
       <div className="flex items-center justify-between px-6 py-3">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl gradient-button flex items-center justify-center">
-            <span className="text-lg">📷</span>
+            <Instagram size={20} className="text-white" />
           </div>
           <span className="font-display text-xl font-bold tracking-tight">Postei</span>
           <span className="text-[10px] font-bold bg-primary/20 text-primary px-2 py-0.5 rounded-full uppercase tracking-wider">
