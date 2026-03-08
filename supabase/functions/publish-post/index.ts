@@ -83,6 +83,88 @@ async function publishToInstagram(
   return { id: publishData.id };
 }
 
+async function publishStoryToInstagram(
+  connection: { access_token: string; instagram_user_id: string },
+  mediaUrl: string,
+  isVideo: boolean
+): Promise<{ id: string }> {
+  const { access_token, instagram_user_id } = connection;
+
+  const body: Record<string, string> = {
+    media_type: "STORIES",
+    access_token,
+  };
+
+  if (isVideo) {
+    body.video_url = mediaUrl;
+  } else {
+    body.image_url = mediaUrl;
+  }
+
+  // Step 1: Create story container
+  const containerRes = await fetch(
+    `https://graph.facebook.com/v21.0/${instagram_user_id}/media`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }
+  );
+  const containerData = await containerRes.json();
+
+  if (containerData.error) {
+    throw new Error(containerData.error.message || "Erro ao criar container de story");
+  }
+
+  const containerId = containerData.id;
+
+  // Step 2: Poll until ready
+  let ready = false;
+  let attempts = 0;
+  const maxAttempts = isVideo ? 60 : 30;
+  const delay = isVideo ? 3000 : 2000;
+
+  while (!ready && attempts < maxAttempts) {
+    const statusRes = await fetch(
+      `https://graph.facebook.com/v21.0/${containerId}?fields=status_code&access_token=${access_token}`
+    );
+    const statusData = await statusRes.json();
+
+    if (statusData.status_code === "FINISHED") {
+      ready = true;
+    } else if (statusData.status_code === "ERROR") {
+      throw new Error("Erro ao processar mídia do Story no Instagram");
+    } else {
+      await new Promise((r) => setTimeout(r, delay));
+      attempts++;
+    }
+  }
+
+  if (!ready) {
+    throw new Error("Timeout ao processar mídia do Story no Instagram");
+  }
+
+  // Step 3: Publish
+  const publishRes = await fetch(
+    `https://graph.facebook.com/v21.0/${instagram_user_id}/media_publish`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        creation_id: containerId,
+        access_token,
+      }),
+    }
+  );
+  const publishData = await publishRes.json();
+
+  if (publishData.error) {
+    throw new Error(publishData.error.message || "Erro ao publicar Story no Instagram");
+  }
+
+  return { id: publishData.id };
+}
+
 async function publishReelToInstagram(
   connection: { access_token: string; instagram_user_id: string },
   caption: string,
@@ -338,6 +420,12 @@ serve(async (req) => {
             connection as { access_token: string; instagram_user_id: string },
             post.generated_content,
             videoUrl
+          );
+        } else if (post.post_type === "story" && (imageUrl || videoUrl)) {
+          result = await publishStoryToInstagram(
+            connection as { access_token: string; instagram_user_id: string },
+            videoUrl || imageUrl,
+            !!videoUrl
           );
         } else if (imageUrl) {
           result = await publishToInstagram(
