@@ -15,7 +15,7 @@ interface MediaUploadProps {
 
 const MAX_SIZE_MB = 50;
 
-const MediaUpload = ({ onUpload, onRemove, mediaUrl, accept = "image/*,video/*" }: MediaUploadProps) => {
+const MediaUpload = ({ onUpload, onRemove, onPreviewChange, mediaUrl, accept = "image/*,video/*" }: MediaUploadProps) => {
   const { user } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
