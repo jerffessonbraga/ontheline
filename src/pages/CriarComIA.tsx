@@ -371,11 +371,26 @@ const CriarComIA = () => {
               </div>
               <Bookmark size={20} />
             </div>
-            <p className="px-4 pb-4 text-xs text-muted-foreground">
-              {generatedContent
-                ? generatedContent.slice(0, 120) + (generatedContent.length > 120 ? "..." : "")
-                : "Gere um conteúdo para ver o preview..."}
-            </p>
+            <div className="px-4 pb-4 text-xs text-muted-foreground relative">
+              {generatedContent ? (
+                <div className="space-y-1">
+                  <p>
+                    <span className="font-semibold text-foreground mr-1">@seuperfil</span>
+                    <span className="whitespace-pre-wrap line-clamp-3">
+                      {generatedContent
+                        .replace(/^[\s\S]*?(?:📝\s*\*\*LEGENDA:\*\*|📝\s*LEGENDA:)\s*/i, "")
+                        .replace(/\n\n(?:#️⃣|🎬|💡)[\s\S]*$/i, "")
+                        .trim() || generatedContent.slice(0, 150)}
+                    </span>
+                  </p>
+                  <button className="text-muted-foreground/80 hover:text-foreground text-[10px]">
+                    mais
+                  </button>
+                </div>
+              ) : (
+                "Gere um conteúdo para ver o preview..."
+              )}
+            </div>
           </motion.div>
 
           {generatedContent && (
