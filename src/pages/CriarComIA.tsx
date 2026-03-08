@@ -268,7 +268,8 @@ const CriarComIA = () => {
           <MediaUpload
             mediaUrl={mediaUrl}
             onUpload={(url) => setMediaUrl(url)}
-            onRemove={() => setMediaUrl(null)}
+            onRemove={() => { setMediaUrl(null); setMediaPreview(null); }}
+            onPreviewChange={(url) => setMediaPreview(url)}
           />
         </div>
 
