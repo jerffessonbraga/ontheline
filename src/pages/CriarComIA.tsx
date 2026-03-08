@@ -50,9 +50,10 @@ const CriarComIA = () => {
         tom: selectedTone,
         detalhes: detalhes || null,
         generated_content: generatedContent,
+        media_url: mediaUrl,
         scheduled_at: dataHora ? new Date(dataHora).toISOString() : null,
         status: schedule ? "agendado" : "rascunho",
-      });
+      } as any);
       if (error) throw error;
       setIsSaved(true);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
