@@ -251,7 +251,7 @@ serve(async (req) => {
     }
 
     const userId = user.id;
-    const { action, postId, imageUrl, imageUrls } = await req.json();
+    const { action, postId, imageUrl, imageUrls, videoUrl } = await req.json();
 
     if (action === "check_scheduled") {
       const now = new Date().toISOString();
