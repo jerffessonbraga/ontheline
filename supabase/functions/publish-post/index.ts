@@ -333,6 +333,12 @@ serve(async (req) => {
             post.generated_content,
             imageUrls
           );
+        } else if (post.post_type === "reel" && videoUrl) {
+          result = await publishReelToInstagram(
+            connection as { access_token: string; instagram_user_id: string },
+            post.generated_content,
+            videoUrl
+          );
         } else if (imageUrl) {
           result = await publishToInstagram(
             connection as { access_token: string; instagram_user_id: string },
