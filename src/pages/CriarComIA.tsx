@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Sparkles, Eye, Film, Image, Circle, LayoutGrid, Heart, MessageCircle, Send, Bookmark, Loader2 } from "lucide-react";
+import { Sparkles, Eye, Film, Image, Circle, LayoutGrid, Heart, MessageCircle, Send, Bookmark, Loader2, Save } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-
+import { useAuth } from "@/contexts/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 const postTypes = [
   { id: "reel", label: "REEL", icon: Film },
   { id: "feed", label: "FEED", icon: LayoutGrid },
