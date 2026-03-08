@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.publish-post]
 verify_jwt = false
+
+[functions.check-scheduled]
+verify_jwt = false
