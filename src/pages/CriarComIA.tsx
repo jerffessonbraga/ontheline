@@ -285,15 +285,25 @@ const CriarComIA = () => {
         </Button>
 
         {generatedContent && !isGenerating && (
-          <Button
-            onClick={handleSave}
-            disabled={isSaved}
-            variant="outline"
-            className="w-full py-5 text-sm font-bold rounded-xl mt-3"
-          >
-            <Save size={16} className="mr-2" />
-            {isSaved ? "✓ Salvo no Histórico" : "Salvar no Histórico"}
-          </Button>
+          <div className="flex gap-2 w-full">
+            <Button
+              onClick={() => handleSave(false)}
+              disabled={isSaved}
+              variant="outline"
+              className="flex-1 py-5 text-sm font-bold rounded-xl"
+            >
+              <Save size={16} className="mr-2" />
+              {isSaved ? "✓ Salvo" : "Salvar Rascunho"}
+            </Button>
+            <Button
+              onClick={() => handleSave(true)}
+              disabled={isSaved}
+              className="flex-1 gradient-button border-0 py-5 text-sm font-bold rounded-xl"
+            >
+              <Calendar size={16} className="mr-2" />
+              {isSaved ? "✓ Agendado" : "Salvar e Agendar"}
+            </Button>
+          </div>
         )}
       </div>
 
