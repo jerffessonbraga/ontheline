@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const postTypes = [
   { id: "reel", label: "REEL", icon: Film },
   { id: "feed", label: "FEED", icon: LayoutGrid },
-  { id: "story", label: "STORY", icon: Circle },
   { id: "carrossel", label: "CARROSSEL", icon: Image },
 ];
 
