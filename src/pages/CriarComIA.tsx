@@ -25,6 +25,8 @@ const tones = [
 ];
 
 const CriarComIA = () => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [selectedType, setSelectedType] = useState("reel");
   const [selectedTone, setSelectedTone] = useState("descontraido");
   const [nicho, setNicho] = useState("Gastronomia / Restaurante");
@@ -33,6 +35,30 @@ const CriarComIA = () => {
   const [dataHora, setDataHora] = useState("2026-03-08T02:00");
   const [generatedContent, setGeneratedContent] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleSave = async () => {
+    if (!generatedContent || !user) return;
+    try {
+      const { error } = await supabase.from("posts").insert({
+        user_id: user.id,
+        post_type: selectedType,
+        nicho,
+        tema: tema || null,
+        tom: selectedTone,
+        detalhes: detalhes || null,
+        generated_content: generatedContent,
+        scheduled_at: dataHora ? new Date(dataHora).toISOString() : null,
+        status: "rascunho",
+      });
+      if (error) throw error;
+      setIsSaved(true);
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success("Post salvo no histórico! 📋");
+    } catch (e: any) {
+      toast.error(e.message || "Erro ao salvar post");
+    }
+  };
 
   const handleGenerate = async () => {
     if (!nicho.trim()) {
