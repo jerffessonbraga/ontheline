@@ -1,11 +1,13 @@
-import { Settings, Sparkles, Calendar, Zap, Plus } from "lucide-react";
+import { Settings, Sparkles, Calendar, Zap, Plus, History, LogOut } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "Configuração", icon: Settings, path: "/" },
   { label: "Criar com IA", icon: Sparkles, path: "/criar" },
   { label: "Agendar", icon: Calendar, path: "/agendar", badge: 0 },
+  { label: "Histórico", icon: History, path: "/historico" },
   { label: "Automações", icon: Zap, path: "/automacoes" },
 ];
 
@@ -16,6 +18,12 @@ interface HeaderProps {
 const Header = ({ onNewPost }: HeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md">
@@ -56,10 +64,9 @@ const Header = ({ onNewPost }: HeaderProps) => {
         </nav>
 
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-            Configure a API
-          </button>
+          <span className="text-xs text-muted-foreground truncate max-w-[150px]">
+            {user?.email}
+          </span>
           <Button
             onClick={onNewPost}
             className="gradient-button border-0 rounded-lg px-4 py-2 text-sm flex items-center gap-2"
@@ -67,6 +74,13 @@ const Header = ({ onNewPost }: HeaderProps) => {
             <Plus size={16} />
             Novo Post
           </Button>
+          <button
+            onClick={handleSignOut}
+            className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-secondary/50"
+            title="Sair"
+          >
+            <LogOut size={16} />
+          </button>
         </div>
       </div>
     </header>
