@@ -100,6 +100,7 @@ export type Database = {
           detalhes: string | null
           generated_content: string
           id: string
+          media_url: string | null
           nicho: string
           post_type: string
           published_at: string | null
@@ -114,6 +115,7 @@ export type Database = {
           detalhes?: string | null
           generated_content: string
           id?: string
+          media_url?: string | null
           nicho?: string
           post_type?: string
           published_at?: string | null
@@ -128,6 +130,7 @@ export type Database = {
           detalhes?: string | null
           generated_content?: string
           id?: string
+          media_url?: string | null
           nicho?: string
           post_type?: string
           published_at?: string | null
