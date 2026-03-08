@@ -81,6 +81,7 @@ const MediaUpload = ({ onUpload, onRemove, onPreviewChange, mediaUrl, accept = "
   const handleRemove = () => {
     setPreview(null);
     onRemove();
+    onPreviewChange?.(null);
     if (inputRef.current) inputRef.current.value = "";
   };
 
