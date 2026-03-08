@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Eye, Film, Image, Circle, LayoutGrid, Heart, MessageCircle, Send, Bookmark, Loader2, Save, Calendar } from "lucide-react";
+import { Sparkles, Eye, Film, Image, LayoutGrid, Heart, MessageCircle, Send, Bookmark, Loader2, Save, Calendar } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,6 @@ import { useQueryClient } from "@tanstack/react-query";
 const postTypes = [
   { id: "reel", label: "REEL", icon: Film },
   { id: "feed", label: "FEED", icon: LayoutGrid },
-  { id: "story", label: "STORY", icon: Circle },
   { id: "carrossel", label: "CARROSSEL", icon: Image },
 ];
 
@@ -192,7 +191,7 @@ const CriarComIA = () => {
 
         <div className="space-y-2">
           <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Tipo de Postagem</label>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {postTypes.map((type) => (
               <button
                 key={type.id}
