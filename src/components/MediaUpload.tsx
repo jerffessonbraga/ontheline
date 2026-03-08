@@ -8,13 +8,14 @@ import { cn } from "@/lib/utils";
 interface MediaUploadProps {
   onUpload: (url: string) => void;
   onRemove: () => void;
+  onPreviewChange?: (url: string | null) => void;
   mediaUrl: string | null;
   accept?: string;
 }
 
 const MAX_SIZE_MB = 50;
 
-const MediaUpload = ({ onUpload, onRemove, mediaUrl, accept = "image/*,video/*" }: MediaUploadProps) => {
+const MediaUpload = ({ onUpload, onRemove, onPreviewChange, mediaUrl, accept = "image/*,video/*" }: MediaUploadProps) => {
   const { user } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -57,7 +58,9 @@ const MediaUpload = ({ onUpload, onRemove, mediaUrl, accept = "image/*,video/*" 
 
       const publicUrl = urlData.publicUrl;
 
-      setPreview({ url: URL.createObjectURL(file), type: isVideo ? "video" : "image" });
+      const localUrl = URL.createObjectURL(file);
+      setPreview({ url: localUrl, type: isVideo ? "video" : "image" });
+      onPreviewChange?.(localUrl);
       onUpload(publicUrl);
       toast.success("Mídia enviada! 📸");
     } catch (e: any) {
@@ -78,6 +81,7 @@ const MediaUpload = ({ onUpload, onRemove, mediaUrl, accept = "image/*,video/*" 
   const handleRemove = () => {
     setPreview(null);
     onRemove();
+    onPreviewChange?.(null);
     if (inputRef.current) inputRef.current.value = "";
   };
 

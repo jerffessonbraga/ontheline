@@ -38,6 +38,7 @@ const CriarComIA = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
+  const [mediaPreview, setMediaPreview] = useState<string | null>(null);
 
   const handleSave = async (schedule = false) => {
     if (!generatedContent || !user) return;
@@ -267,7 +268,8 @@ const CriarComIA = () => {
           <MediaUpload
             mediaUrl={mediaUrl}
             onUpload={(url) => setMediaUrl(url)}
-            onRemove={() => setMediaUrl(null)}
+            onRemove={() => { setMediaUrl(null); setMediaPreview(null); }}
+            onPreviewChange={(url) => setMediaPreview(url)}
           />
         </div>
 
@@ -346,11 +348,11 @@ const CriarComIA = () => {
               <span className="ml-auto text-muted-foreground">•••</span>
             </div>
             <div className="aspect-square bg-muted flex flex-col items-center justify-center gap-3 text-muted-foreground overflow-hidden">
-              {mediaUrl ? (
-                mediaUrl.match(/\.(mp4|mov|webm|avi)$/i) ? (
-                  <video src={mediaUrl} className="w-full h-full object-cover" muted autoPlay loop />
+              {mediaPreview ? (
+                mediaPreview.match(/\.(mp4|mov|webm|avi)$/i) || mediaUrl?.match(/\.(mp4|mov|webm|avi)$/i) ? (
+                  <video src={mediaPreview} className="w-full h-full object-cover" muted autoPlay loop />
                 ) : (
-                  <img src={mediaUrl} alt="Preview" className="w-full h-full object-cover" />
+                  <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
                 )
               ) : isGenerating ? (
                 <Loader2 size={32} className="animate-spin text-primary" />
