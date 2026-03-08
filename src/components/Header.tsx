@@ -1,12 +1,13 @@
-import { Settings, Sparkles, Calendar, Zap, Plus, History, LogOut } from "lucide-react";
+import { Settings, Sparkles, Calendar, Zap, Plus, History, LogOut, Instagram } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import NotificationBell from "@/components/NotificationBell";
 
 const navItems = [
   { label: "Configuração", icon: Settings, path: "/" },
   { label: "Criar com IA", icon: Sparkles, path: "/criar" },
-  { label: "Agendar", icon: Calendar, path: "/agendar", badge: 0 },
+  { label: "Agendar", icon: Calendar, path: "/agendar" },
   { label: "Histórico", icon: History, path: "/historico" },
   { label: "Automações", icon: Zap, path: "/automacoes" },
 ];
@@ -53,20 +54,16 @@ const Header = ({ onNewPost }: HeaderProps) => {
               >
                 <item.icon size={16} />
                 {item.label}
-                {item.badge !== undefined && (
-                  <span className="bg-primary text-primary-foreground text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                    {item.badge}
-                  </span>
-                )}
               </button>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <span className="text-xs text-muted-foreground truncate max-w-[150px]">
             {user?.email}
           </span>
+          <NotificationBell />
           <Button
             onClick={onNewPost}
             className="gradient-button border-0 rounded-lg px-4 py-2 text-sm flex items-center gap-2"

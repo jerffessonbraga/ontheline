@@ -1,56 +1,31 @@
 import { useState } from "react";
-import { AlertTriangle, X, Rocket, Key, ExternalLink } from "lucide-react";
+import { AlertTriangle, X, Rocket, Key, ExternalLink, Instagram, CheckCircle2, Link2, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Configuracao = () => {
-  const [showWarning, setShowWarning] = useState(true);
-  const [apiKey, setApiKey] = useState("");
+  const { user } = useAuth();
+  const [showWarning, setShowWarning] = useState(false);
+
+  const { data: igConnection } = useQuery({
+    queryKey: ["instagram_connection", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("instagram_connections")
+        .select("*")
+        .eq("is_active", true)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!user,
+  });
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8 pb-20 space-y-8">
-      <AnimatePresence>
-        {showWarning && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="glass-card p-5 border-warning/30"
-          >
-            <div className="flex gap-3">
-              <AlertTriangle className="text-warning shrink-0 mt-0.5" size={20} />
-              <div className="space-y-2 flex-1">
-                <h3 className="font-display font-semibold text-warning">
-                  Para a IA funcionar: baixe e abra localmente
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  O Claude.ai bloqueia chamadas a APIs externas. Siga estes passos:
-                </p>
-                <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-                  <li>Clique em <strong>⬇ Download / Baixar</strong> no topo direito do preview</li>
-                  <li>Salve o arquivo <code className="bg-muted px-1.5 py-0.5 rounded text-xs">instaflow.html</code></li>
-                  <li>Abra no <strong>Chrome ou Edge</strong> do seu PC</li>
-                  <li>Cole a chave Gemini → Testar → funciona! 🚀</li>
-                </ol>
-              </div>
-              <button onClick={() => setShowWarning(false)} className="text-muted-foreground hover:text-foreground shrink-0">
-                <X size={18} />
-              </button>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowWarning(false)}
-              className="mt-3 ml-8 border-border text-muted-foreground hover:text-foreground"
-            >
-              <X size={14} className="mr-1" />
-              Fechar
-            </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -66,10 +41,36 @@ const Configuracao = () => {
           Bem-vindo ao InstaFlow
         </h1>
         <p className="text-muted-foreground max-w-lg">
-          Automação inteligente para o seu Instagram, usando Gemini AI do Google — 100% gratuito. Configure em 2 minutos e comece a criar conteúdo profissional.
+          Copiloto de conteúdo para Instagram com IA. Gere, agende e publique — tudo em um só lugar.
         </p>
       </motion.div>
 
+      {/* AI Status */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="glass-card p-6"
+      >
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 rounded-full bg-success/15 flex items-center justify-center shrink-0">
+            <CheckCircle2 size={20} className="text-success" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-3">
+              <h2 className="font-display text-lg font-semibold">Gemini AI</h2>
+              <span className="text-[10px] font-bold bg-success/20 text-success px-2 py-0.5 rounded-full uppercase">
+                Ativo
+              </span>
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              IA integrada via Lovable Cloud — sem necessidade de chave API. Pronto para gerar conteúdo.
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Instagram Integration */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -77,56 +78,106 @@ const Configuracao = () => {
         className="glass-card p-6"
       >
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center text-primary font-display font-bold shrink-0">
-            1
+          <div className="w-10 h-10 rounded-full bg-accent/15 flex items-center justify-center shrink-0">
+            <Instagram size={20} className="text-accent" />
           </div>
           <div className="flex-1 space-y-4">
             <div className="flex items-center gap-3">
-              <Key size={18} className="text-primary" />
-              <h2 className="font-display text-lg font-semibold">API Gemini (Google)</h2>
-              <span className="text-[10px] font-bold bg-success/20 text-success px-2 py-0.5 rounded-full uppercase">
-                Grátis
-              </span>
+              <h2 className="font-display text-lg font-semibold">Instagram</h2>
+              {igConnection ? (
+                <span className="text-[10px] font-bold bg-success/20 text-success px-2 py-0.5 rounded-full uppercase">
+                  Conectado
+                </span>
+              ) : (
+                <span className="text-[10px] font-bold bg-warning/20 text-warning px-2 py-0.5 rounded-full uppercase">
+                  Em breve
+                </span>
+              )}
             </div>
-            <p className="text-sm text-muted-foreground">
-              O Gemini 1.5 Flash tem <strong className="text-foreground">15 req/minuto</strong> e{" "}
-              <strong className="text-foreground">1 milhão de tokens/dia</strong> sem pagar nada. Mais do que suficiente para dezenas de posts por dia.
-            </p>
-            <ul className="text-sm text-muted-foreground space-y-2">
-              <li className="flex items-center gap-2">
-                <span className="text-primary">▸</span>
-                Acesse{" "}
-                <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" className="text-primary hover:underline font-medium">
-                  aistudio.google.com/apikey
-                  <ExternalLink size={12} className="inline ml-1" />
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-primary">▸</span>
-                Faça login com sua conta Google
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-primary">▸</span>
-                Clique em <strong className="text-foreground">"Create API Key"</strong> e copie
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-primary">▸</span>
-                Cole abaixo e clique em Testar
-              </li>
-            </ul>
-            <div className="flex gap-3">
-              <Input
-                placeholder="AIzaSy..."
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
-              />
-              <Button className="gradient-button border-0 shrink-0">
-                ▶ Testar
-              </Button>
-            </div>
+
+            {igConnection ? (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">
+                  Conectado como <strong className="text-foreground">@{igConnection.instagram_username}</strong>
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  A publicação automática via Meta Graph API está sendo preparada. Por enquanto, o InstaFlow funciona como copiloto:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">
+                    <span className="text-primary mt-0.5">✦</span>
+                    <div>
+                      <p className="text-xs font-semibold">Gerar</p>
+                      <p className="text-[10px] text-muted-foreground">IA cria o conteúdo</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">
+                    <span className="text-primary mt-0.5">✦</span>
+                    <div>
+                      <p className="text-xs font-semibold">Agendar</p>
+                      <p className="text-[10px] text-muted-foreground">Calendário visual</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 p-3 rounded-lg bg-secondary/50">
+                    <span className="text-primary mt-0.5">✦</span>
+                    <div>
+                      <p className="text-xs font-semibold">Lembrete</p>
+                      <p className="text-[10px] text-muted-foreground">Notifica na hora</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-lg bg-muted/50 border border-border">
+                  <h4 className="text-xs font-semibold flex items-center gap-1.5 mb-2">
+                    <Shield size={12} className="text-muted-foreground" />
+                    Requisitos para publicação automática
+                  </h4>
+                  <ul className="text-[11px] text-muted-foreground space-y-1">
+                    <li>▸ Conta Business ou Creator no Instagram</li>
+                    <li>▸ Página do Facebook vinculada</li>
+                    <li>▸ App aprovado pela Meta (em processo)</li>
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
         </div>
+      </motion.div>
+
+      {/* Status Overview */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="glass-card p-6"
+      >
+        <h2 className="font-display text-lg font-semibold mb-4 flex items-center gap-2">
+          <Link2 size={18} className="text-primary" />
+          Fluxo de Publicação
+        </h2>
+        <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium">
+            <span>1. Criar com IA</span>
+          </div>
+          <span className="text-muted-foreground">→</span>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium">
+            <span>2. Salvar</span>
+          </div>
+          <span className="text-muted-foreground">→</span>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium">
+            <span>3. Agendar</span>
+          </div>
+          <span className="text-muted-foreground">→</span>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-warning/10 text-warning font-medium">
+            <span>4. Publicar</span>
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground mt-3">
+          Quando a integração com a Meta API estiver ativa, o passo 4 será automático.
+        </p>
       </motion.div>
     </div>
   );
