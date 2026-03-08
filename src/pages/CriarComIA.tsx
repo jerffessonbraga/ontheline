@@ -37,6 +37,7 @@ const CriarComIA = () => {
   const [generatedContent, setGeneratedContent] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [mediaUrl, setMediaUrl] = useState<string | null>(null);
 
   const handleSave = async (schedule = false) => {
     if (!generatedContent || !user) return;
