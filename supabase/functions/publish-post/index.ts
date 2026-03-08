@@ -83,6 +83,79 @@ async function publishToInstagram(
   return { id: publishData.id };
 }
 
+async function publishReelToInstagram(
+  connection: { access_token: string; instagram_user_id: string },
+  caption: string,
+  videoUrl: string
+): Promise<{ id: string }> {
+  const { access_token, instagram_user_id } = connection;
+
+  // Step 1: Create reel container
+  const containerRes = await fetch(
+    `https://graph.facebook.com/v21.0/${instagram_user_id}/media`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        media_type: "REELS",
+        video_url: videoUrl,
+        caption,
+        access_token,
+      }),
+    }
+  );
+  const containerData = await containerRes.json();
+
+  if (containerData.error) {
+    throw new Error(containerData.error.message || "Erro ao criar container de reel");
+  }
+
+  const containerId = containerData.id;
+
+  // Step 2: Poll until ready (video processing takes longer)
+  let ready = false;
+  let attempts = 0;
+  while (!ready && attempts < 60) {
+    const statusRes = await fetch(
+      `https://graph.facebook.com/v21.0/${containerId}?fields=status_code&access_token=${access_token}`
+    );
+    const statusData = await statusRes.json();
+
+    if (statusData.status_code === "FINISHED") {
+      ready = true;
+    } else if (statusData.status_code === "ERROR") {
+      throw new Error("Erro ao processar vídeo do Reel no Instagram");
+    } else {
+      await new Promise((r) => setTimeout(r, 3000));
+      attempts++;
+    }
+  }
+
+  if (!ready) {
+    throw new Error("Timeout ao processar vídeo do Reel no Instagram");
+  }
+
+  // Step 3: Publish
+  const publishRes = await fetch(
+    `https://graph.facebook.com/v21.0/${instagram_user_id}/media_publish`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        creation_id: containerId,
+        access_token,
+      }),
+    }
+  );
+  const publishData = await publishRes.json();
+
+  if (publishData.error) {
+    throw new Error(publishData.error.message || "Erro ao publicar Reel no Instagram");
+  }
+
+  return { id: publishData.id };
+}
+
 async function publishCarouselToInstagram(
   connection: { access_token: string; instagram_user_id: string },
   caption: string,
