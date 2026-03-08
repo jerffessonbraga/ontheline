@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Sparkles, Eye, Film, Image, Circle, LayoutGrid, Heart, MessageCircle, Send, Bookmark, Loader2, Save, Calendar } from "lucide-react";
+import MediaUpload from "@/components/MediaUpload";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,7 @@ const CriarComIA = () => {
   const [generatedContent, setGeneratedContent] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [mediaUrl, setMediaUrl] = useState<string | null>(null);
 
   const handleSave = async (schedule = false) => {
     if (!generatedContent || !user) return;
@@ -48,9 +50,10 @@ const CriarComIA = () => {
         tom: selectedTone,
         detalhes: detalhes || null,
         generated_content: generatedContent,
+        media_url: mediaUrl,
         scheduled_at: dataHora ? new Date(dataHora).toISOString() : null,
         status: schedule ? "agendado" : "rascunho",
-      });
+      } as any);
       if (error) throw error;
       setIsSaved(true);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
@@ -260,6 +263,15 @@ const CriarComIA = () => {
         </div>
 
         <div className="space-y-2">
+          <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Mídia (Imagem/Vídeo)</label>
+          <MediaUpload
+            mediaUrl={mediaUrl}
+            onUpload={(url) => setMediaUrl(url)}
+            onRemove={() => setMediaUrl(null)}
+          />
+        </div>
+
+        <div className="space-y-2">
           <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Agendar Para</label>
           <Input
             type="datetime-local"
@@ -333,8 +345,14 @@ const CriarComIA = () => {
               </div>
               <span className="ml-auto text-muted-foreground">•••</span>
             </div>
-            <div className="aspect-square bg-muted flex flex-col items-center justify-center gap-3 text-muted-foreground">
-              {isGenerating ? (
+            <div className="aspect-square bg-muted flex flex-col items-center justify-center gap-3 text-muted-foreground overflow-hidden">
+              {mediaUrl ? (
+                mediaUrl.match(/\.(mp4|mov|webm|avi)$/i) ? (
+                  <video src={mediaUrl} className="w-full h-full object-cover" muted autoPlay loop />
+                ) : (
+                  <img src={mediaUrl} alt="Preview" className="w-full h-full object-cover" />
+                )
+              ) : isGenerating ? (
                 <Loader2 size={32} className="animate-spin text-primary" />
               ) : (
                 <>
