@@ -250,52 +250,52 @@ const Configuracao = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="glass-card p-6 space-y-6"
+        className="glass-card p-8 space-y-8"
       >
-        <h2 className="font-display text-lg font-bold uppercase tracking-wider flex items-center gap-2">
-          <span className="text-primary">▶</span>
+        <h2 className="font-display text-xl font-bold uppercase tracking-wider flex items-center gap-3">
+          <Instagram size={22} className="text-accent" />
           Como a publicação automática funciona
         </h2>
 
-        <div className="space-y-5">
+        <div className="space-y-6">
           <div className="flex items-start gap-4">
-            <div className="w-8 h-8 rounded-full bg-destructive/15 flex items-center justify-center shrink-0 text-xs font-bold text-destructive">A</div>
+            <div className="w-9 h-9 rounded-full bg-destructive/15 flex items-center justify-center shrink-0 text-sm font-bold text-destructive">A</div>
             <div>
-              <h3 className="text-sm font-semibold">Conta Business/Creator (obrigatório)</h3>
-              <p className="text-xs text-muted-foreground mt-1">
+              <h3 className="text-base font-semibold">Conta Business/Creator (obrigatório)</h3>
+              <p className="text-sm text-muted-foreground mt-1.5">
                 A API do Instagram só funciona com contas Profissionais. Vá em Configurações → Conta → Mudar para conta Profissional. Gratuito, não muda seu conteúdo.
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-4">
-            <div className="w-8 h-8 rounded-full bg-warning/15 flex items-center justify-center shrink-0 text-xs font-bold text-warning">B</div>
+            <div className="w-9 h-9 rounded-full bg-warning/15 flex items-center justify-center shrink-0 text-sm font-bold text-warning">B</div>
             <div>
-              <h3 className="text-sm font-semibold">O que publica automaticamente</h3>
-              <div className="flex flex-wrap gap-2 mt-1.5">
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-success/15 text-success font-medium">✓ Feed (foto/vídeo)</span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-success/15 text-success font-medium">✓ Carrossel até 10 imagens</span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-warning/15 text-warning font-medium">⚠ Reels (limitado)</span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-medium">✗ Stories</span>
+              <h3 className="text-base font-semibold">O que publica automaticamente</h3>
+              <div className="flex flex-wrap gap-2.5 mt-2">
+                <span className="text-xs px-2.5 py-1 rounded-full bg-success/15 text-success font-medium">✓ Feed (foto/vídeo)</span>
+                <span className="text-xs px-2.5 py-1 rounded-full bg-success/15 text-success font-medium">✓ Carrossel até 10 imagens</span>
+                <span className="text-xs px-2.5 py-1 rounded-full bg-warning/15 text-warning font-medium">⚠ Reels (limitado)</span>
+                <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground font-medium">✗ Stories</span>
               </div>
             </div>
           </div>
 
           <div className="flex items-start gap-4">
-            <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0 text-xs font-bold text-primary">C</div>
+            <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0 text-sm font-bold text-primary">C</div>
             <div>
-              <h3 className="text-sm font-semibold">Publicação 100% automática</h3>
-              <p className="text-xs text-muted-foreground mt-1">
+              <h3 className="text-base font-semibold">Publicação 100% automática</h3>
+              <p className="text-sm text-muted-foreground mt-1.5">
                 O InstaFlow agenda e publica automaticamente via backend — sem precisar abrir o app na hora marcada.
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-4">
-            <div className="w-8 h-8 rounded-full bg-accent/15 flex items-center justify-center shrink-0 text-xs font-bold text-accent">D</div>
+            <div className="w-9 h-9 rounded-full bg-accent/15 flex items-center justify-center shrink-0 text-sm font-bold text-accent">D</div>
             <div>
-              <h3 className="text-sm font-semibold">Fluxo atual do InstaFlow</h3>
-              <p className="text-xs text-muted-foreground mt-1">
+              <h3 className="text-base font-semibold">Fluxo atual do InstaFlow</h3>
+              <p className="text-sm text-muted-foreground mt-1.5">
                 IA gera conteúdo → você aprova → InstaFlow agenda → na hora certa chama a API do Instagram e publica. Simples assim.
               </p>
             </div>
