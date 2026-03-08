@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 const postTypes = [
   { id: "reel", label: "REEL", icon: Film },
   { id: "feed", label: "FEED", icon: LayoutGrid },
+  { id: "story", label: "STORY", icon: Circle },
   { id: "carrossel", label: "CARROSSEL", icon: Image },
 ];
 
