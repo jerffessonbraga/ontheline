@@ -191,7 +191,7 @@ const CriarComIA = () => {
 
         <div className="space-y-2">
           <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Tipo de Postagem</label>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {postTypes.map((type) => (
               <button
                 key={type.id}
