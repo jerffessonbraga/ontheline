@@ -33,7 +33,7 @@ const Header = ({ onNewPost }: HeaderProps) => {
           <div className="w-9 h-9 rounded-xl gradient-button flex items-center justify-center">
             <span className="text-lg">📷</span>
           </div>
-          <span className="font-display text-xl font-bold tracking-tight">InstaFlow</span>
+          <span className="font-display text-xl font-bold tracking-tight">Postei</span>
           <span className="text-[10px] font-bold bg-primary/20 text-primary px-2 py-0.5 rounded-full uppercase tracking-wider">
             Grátis
           </span>

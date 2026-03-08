@@ -40,7 +40,7 @@ const StatusBar = () => {
         </span>
       </div>
       <span className="text-muted-foreground">
-        InstaFlow ✦ Powered by Gemini
+        Postei ✦ Powered by Gemini
       </span>
     </footer>
   );
