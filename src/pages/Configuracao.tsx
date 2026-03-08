@@ -79,7 +79,7 @@ const Configuracao = () => {
           Versão Gratuita
         </span>
         <h1 className="font-display text-3xl font-bold gradient-text mb-3">
-          Bem-vindo ao InstaFlow
+          Bem-vindo ao Postei
         </h1>
         <p className="text-muted-foreground max-w-lg">
           Copiloto de conteúdo para Instagram com IA. Gere, agende e publique — tudo em um só lugar.
