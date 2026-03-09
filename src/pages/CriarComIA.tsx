@@ -347,7 +347,7 @@ const CriarComIA = () => {
               </div>
               <span className="ml-auto text-muted-foreground">•••</span>
             </div>
-            <div className="aspect-square bg-muted flex flex-col items-center justify-center gap-3 text-muted-foreground overflow-hidden">
+            <div className="aspect-square bg-muted flex flex-col items-center justify-center gap-3 text-muted-foreground overflow-hidden relative">
               {mediaPreview ? (
                 mediaPreview.match(/\.(mp4|mov|webm|avi)$/i) || mediaUrl?.match(/\.(mp4|mov|webm|avi)$/i) ? (
                   <video src={mediaPreview} className="w-full h-full object-cover" muted autoPlay loop />
@@ -355,7 +355,23 @@ const CriarComIA = () => {
                   <img src={mediaPreview} alt="Preview" className="w-full h-full object-cover" />
                 )
               ) : isGenerating ? (
-                <Loader2 size={32} className="animate-spin text-primary" />
+                <div className="flex flex-col items-center gap-3">
+                  <Loader2 size={32} className="animate-spin text-primary" />
+                  <p className="text-xs text-muted-foreground">Gerando conteúdo...</p>
+                </div>
+              ) : generatedContent ? (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-primary/20 via-accent/10 to-primary/5 p-6">
+                  {postTypes.find(t => t.id === selectedType) && (() => {
+                    const Icon = postTypes.find(t => t.id === selectedType)!.icon;
+                    return <Icon size={36} className="text-primary/70" />;
+                  })()}
+                  <p className="text-xs font-semibold text-primary/80 text-center">
+                    {postTypes.find(t => t.id === selectedType)?.label}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground text-center leading-relaxed max-w-[160px]">
+                    Envie uma imagem ou vídeo para visualizar a mídia aqui
+                  </p>
+                </div>
               ) : (
                 <>
                   <LayoutGrid size={32} />
